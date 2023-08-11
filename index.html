@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Новости</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #eee;
+		}
+		.container {
+			max-width: 800px;
+			margin: 0 auto;
+			padding: 20px;
+			background-color: #fff;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+		}
+		.post {
+			margin-bottom: 30px;
+			padding: 20px;
+			background-color: #fff;
+			box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+		}
+		.post h2 {
+			font-size: 28px;
+			margin-top: 0;
+		}
+		.post p {
+			font-size: 18px;
+			line-height: 1.4;
+			margin-bottom: 15px;
+		}
+		.post a {
+			color: #007bff;
+			text-decoration: none;
+		}
+		.post a:hover {
+			text-decoration: underline;
+		}
+		.post .date {
+			font-size: 16px;
+			color: #999;
+			margin-top: 10px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container"></div>
+
+	<script>
+		fetch('allNews.csv') // загружаем файл с сервера
+			.then(response => response.text()) // получаем текстовое содержимое файла
+			.then(data => {
+				const container = document.querySelector('.container');
+
+				// разбиваем текст на строки и удаляем заголовок CSV-файла
+				const lines = data.split('\n').slice(1);
+
+				// проходимся по каждой строке и создаем элементы для отображения новостей
+				lines.forEach(line => {
+          if (line.trim() !== '') {
+					const [title, description, link, date] = line.split(',');
+          
+
+					const post = document.createElement('div');
+					post.className = 'post';
+
+					const h2 = document.createElement('h2');
+					h2.textContent = title;
+
+					const p = document.createElement('p');
+					p.textContent = description;
+
+					const a = document.createElement('a');
+					a.href = link;
+					a.target = '_blank';
+					a.textContent = 'Читать далее...';
+
+					const postDate = document.createElement('div');
+					postDate.className = 'date';
+					postDate.textContent = date;
+
+					post.appendChild(h2);
+					post.appendChild(p);
+					post.appendChild(a);
+					post.appendChild(postDate);
+
+					container.appendChild(post);
+          }
+				});
+			})
+			.catch(error => console.error(error));
+	</script>
+</body>
+</html>
